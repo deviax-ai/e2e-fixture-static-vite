@@ -1,0 +1,45 @@
+{
+  "stack_bucket": "node-vite-static",
+  "stack_slug": "vite-react",
+  "external": {
+    "ai_source": "hand",
+    "complexity": "standard"
+  },
+  "must_find_issues": [
+    { "source": "regex", "title_contains": "localhost" }
+  ],
+  "required_artifacts": [
+    "Dockerfile",
+    ".deviax/k8s/deployment.yaml",
+    ".deviax/k8s/service.yaml"
+  ],
+  "required_questions": [
+    "subdomain"
+  ],
+  "must_reach_phase": "live",
+  "assert": {
+    "outcome": "success",
+    "url_status_class": "2xx",
+    "url_status_after_1h": "not_5xx"
+  },
+  "budget": {
+    "max_ai_cost_usd": 0.80,
+    "max_duration_seconds": 600,
+    "max_user_questions": 4
+  },
+  "seeded_problems": [
+    {
+      "file": "src/api.ts",
+      "line": 5,
+      "type": "hardcoded_localhost",
+      "marker_substring": "http://localhost:3001/api"
+    },
+    {
+      "file": "src/api.ts",
+      "line": 10,
+      "type": "hardcoded_secret",
+      "marker_substring": "dev-token-1234567890abcdef"
+    }
+  ],
+  "notes": "Phase 1 simplest-pillar fixture. Vite + React, no DB, no managed deps. Exercises static-build path: pipeline must produce a multi-stage Dockerfile (node build → nginx serve dist/) and a Service+Deployment that responds 2xx for '/' on the generated subdomain."
+}
